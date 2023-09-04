@@ -6,9 +6,12 @@ import { MantineProvider } from "@mantine/core";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <MantineProvider
-      theme={{fontFamily: 'Verdana, sans-serif',
-      fontFamilyMonospace: 'Monaco, Courier, monospace',
-      headings: { fontFamily: 'Greycliff CF, sans-serif' }, colorScheme: "light" }}
+      theme={{
+        fontFamily: "Verdana, sans-serif",
+        fontFamilyMonospace: "Monaco, Courier, monospace",
+        headings: { fontFamily: "Greycliff CF, sans-serif" },
+        colorScheme: "light",
+      }}
       withGlobalStyles
       withNormalizeCSS
     >

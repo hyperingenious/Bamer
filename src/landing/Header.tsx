@@ -1,28 +1,27 @@
-import { useState } from "react";
 import {
   createStyles,
   Container,
   Avatar,
   UnstyledButton,
   Group,
-  Text,
   Menu,
-  Tabs,
-  Burger,
   rem,
   TextInput,
   TextInputProps,
   ActionIcon,
   useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import {
   IconLogout,
   IconChevronDown,
   IconSearch,
   IconArrowRight,
   IconArrowLeft,
+  IconShoppingCart,
+  IconPackage,
 } from "@tabler/icons-react";
+import { useEffect } from "react";
+import { getProductsData } from "../services/apiProducts";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -38,7 +37,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   mainSection: {
-    paddingBottom: theme.spacing.sm,
+    paddingBottom: theme.spacing.xs,
   },
 
   user: {
@@ -113,15 +112,22 @@ const data = {
 export function SearchBar(props: TextInputProps) {
   const theme = useMantineTheme();
 
+  useEffect(function () {
+    async function jaiHo() {
+      await getProductsData('mart');
+    }
+    jaiHo();
+  }, []);
+
   return (
     <TextInput
       icon={<IconSearch size="1.1rem" stroke={1.5} />}
-      radius="xl"
-      size="md"
+      radius={"md"}
+      size="xs"
       rightSection={
         <ActionIcon
-          size={32}
-          radius="xl"
+          size={"xs"}
+          radius="md"
           color={theme.primaryColor}
           variant="filled"
         >
@@ -140,9 +146,7 @@ export function SearchBar(props: TextInputProps) {
 }
 
 export default function HeaderTabs() {
-  const { classes, cx } = useStyles();
-  const [opened, { toggle }] = useDisclosure(false);
-  const [userMenuOpened, setUserMenuOpened] = useState(false);
+  const { classes } = useStyles();
 
   return (
     <div className={classes.header}>
@@ -151,27 +155,16 @@ export default function HeaderTabs() {
           <h6>
             <strong>BAMER</strong>
           </h6>
-          <Burger
-            opened={opened}
-            onClick={toggle}
-            className={classes.burger}
-            size="sm"
-          />
 
+          <SearchBar />
           <Menu
             width={260}
             position="bottom-end"
             transitionProps={{ transition: "pop-top-right" }}
-            onClose={() => setUserMenuOpened(false)}
-            onOpen={() => setUserMenuOpened(true)}
             withinPortal
           >
             <Menu.Target>
-              <UnstyledButton
-                className={cx(classes.user, {
-                  [classes.userActive]: userMenuOpened,
-                })}
-              >
+              <UnstyledButton>
                 <Group spacing={7}>
                   <Avatar
                     src={data.user.image}
@@ -179,33 +172,26 @@ export default function HeaderTabs() {
                     radius="xl"
                     size={20}
                   />
-                  <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                    {data.user.name}
-                  </Text>
                   <IconChevronDown size={rem(12)} stroke={1.5} />
                 </Group>
               </UnstyledButton>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item icon={<IconLogout size="0.9rem" stroke={1.5} />}>
+              <Menu.Item icon={<IconShoppingCart size="0.9rem" stroke={1.5} />}>
+                Cart
+              </Menu.Item>
+              <Menu.Item icon={<IconPackage size="0.9rem" stroke={1.5} />}>
+                My Orders
+              </Menu.Item>
+              <Menu.Item
+                color="red"
+                icon={<IconLogout size="0.9rem" stroke={1.5} />}
+              >
                 Logout
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>
         </Group>
-      </Container>
-      <Container>
-        <Tabs
-          defaultValue="Home"
-          variant="outline"
-          classNames={{
-            root: classes.tabs,
-            tabsList: classes.tabsList,
-            tab: classes.tab,
-          }}
-        >
-          <SearchBar />
-        </Tabs>
       </Container>
     </div>
   );
