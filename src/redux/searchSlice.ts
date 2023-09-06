@@ -13,7 +13,7 @@ export const fetchQuery = createAsyncThunk(
 const initialState = {
   data: [],
   status: "idle",
-  errorMessage :''
+  errorMessage :'noError'
 } 
 
 const searchSlice = createSlice({
@@ -32,6 +32,8 @@ const searchSlice = createSlice({
         state.data = [...state.data, ...action.payload]
     }).addCase(fetchQuery.rejected, (state, action)=>{
       state.status = 'error'
-      state.errorMessage = action.payload
+      state.errorMessage = action.error.message
     })
 });
+
+export default searchSlice.reducer

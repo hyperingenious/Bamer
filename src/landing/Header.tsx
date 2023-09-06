@@ -10,18 +10,16 @@ import {
   TextInputProps,
   ActionIcon,
   useMantineTheme,
+  Title,
 } from "@mantine/core";
 import {
   IconLogout,
-  IconChevronDown,
   IconSearch,
   IconArrowRight,
   IconArrowLeft,
   IconShoppingCart,
   IconPackage,
 } from "@tabler/icons-react";
-import { useEffect } from "react";
-import { getProductsData } from "../services/apiProducts";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -38,6 +36,7 @@ const useStyles = createStyles((theme) => ({
 
   mainSection: {
     paddingBottom: theme.spacing.xs,
+    maxWidth: '70rem !important'
   },
 
   user: {
@@ -112,24 +111,17 @@ const data = {
 export function SearchBar(props: TextInputProps) {
   const theme = useMantineTheme();
 
-  useEffect(function () {
-    async function jaiHo() {
-      await getProductsData('mart');
-    }
-    jaiHo();
-  }, []);
-
   return (
     <TextInput
-      icon={<IconSearch size="1.1rem" stroke={1.5} />}
+    style={{maxWidth: '32rem'}}
+      icon={<IconSearch size="0.5rem" stroke={1.5} />}
       radius={"md"}
       size="xs"
       rightSection={
         <ActionIcon
           size={"xs"}
-          radius="md"
+          radius="xs"
           color={theme.primaryColor}
-          variant="filled"
         >
           {theme.dir === "ltr" ? (
             <IconArrowRight size="1.1rem" stroke={1.5} />
@@ -138,7 +130,7 @@ export function SearchBar(props: TextInputProps) {
           )}
         </ActionIcon>
       }
-      placeholder="Search questions"
+      placeholder="Search Products"
       rightSectionWidth={42}
       {...props}
     />
@@ -151,10 +143,10 @@ export default function HeaderTabs() {
   return (
     <div className={classes.header}>
       <Container className={classes.mainSection}>
-        <Group position="apart">
-          <h6>
+        <Group position="apart" noWrap>
+          <Title size={'h6'}>
             <strong>BAMER</strong>
-          </h6>
+          </Title>
 
           <SearchBar />
           <Menu
@@ -172,7 +164,7 @@ export default function HeaderTabs() {
                     radius="xl"
                     size={20}
                   />
-                  <IconChevronDown size={rem(12)} stroke={1.5} />
+                  {/* <IconChevronDown size={rem(12)} stroke={1.5} /> */}
                 </Group>
               </UnstyledButton>
             </Menu.Target>

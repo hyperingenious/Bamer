@@ -6,9 +6,7 @@ export async function getProductsData(query: string) {
     .select("*")
     .ilike("category", `%${query}%`);
 
-    console.log(error)
+  if (error) throw error;
 
-  if (error) throw Error(`Something went wrong ${error}`);
-
-  console.log(Products);
+  return Products;
 }
