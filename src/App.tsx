@@ -3,6 +3,10 @@ import AppLayout from "./ui/AppLayout";
 import NotFoundImage from "./ui/NotFoundImage";
 import CardsCarousel from "./landing/CardsCarousel";
 import Products, { loader as productsLoader } from "./pages/Products";
+import ProductCheckout, {
+  loader as productCheckoutLoader,
+} from "./pages/ProductCheckout";
+import Register, { action as registerAction } from "./pages/Register";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +22,17 @@ const router = createBrowserRouter([
         element: <Products />,
         loader: productsLoader,
       },
+      {
+        path: "productCheckout/:productId",
+        element: <ProductCheckout />,
+        loader: productCheckoutLoader,
+      },
     ],
+  },
+  {
+    path: "register",
+    element: <Register />,
+    action: registerAction,
   },
 ]);
 

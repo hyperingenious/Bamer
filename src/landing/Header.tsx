@@ -20,6 +20,7 @@ import {
   IconShoppingCart,
   IconPackage,
 } from "@tabler/icons-react";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -36,7 +37,7 @@ const useStyles = createStyles((theme) => ({
 
   mainSection: {
     paddingBottom: theme.spacing.xs,
-    maxWidth: '70rem !important'
+    maxWidth: "70rem !important",
   },
 
   user: {
@@ -110,30 +111,34 @@ const data = {
 
 export function SearchBar(props: TextInputProps) {
   const theme = useMantineTheme();
+  const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (e.target[0].value !== "") navigate(`product/${e.target[0].value}`);
+  }
 
   return (
-    <TextInput
-    style={{maxWidth: '32rem'}}
-      icon={<IconSearch size="0.5rem" stroke={1.5} />}
-      radius={"md"}
-      size="xs"
-      rightSection={
-        <ActionIcon
-          size={"xs"}
-          radius="xs"
-          color={theme.primaryColor}
-        >
-          {theme.dir === "ltr" ? (
-            <IconArrowRight size="1.1rem" stroke={1.5} />
-          ) : (
-            <IconArrowLeft size="1.1rem" stroke={1.5} />
-          )}
-        </ActionIcon>
-      }
-      placeholder="Search Products"
-      rightSectionWidth={42}
-      {...props}
-    />
+    <form onSubmit={handleSubmit}>
+      <TextInput
+        style={{ maxWidth: "32rem" }}
+        icon={<IconSearch size="0.5rem" stroke={1.5} />}
+        radius={"md"}
+        size="xs"
+        rightSection={
+          <ActionIcon size={"xs"} radius="xs" color={theme.primaryColor}>
+            {theme.dir === "ltr" ? (
+              <IconArrowRight size="1.1rem" stroke={1.5} />
+            ) : (
+              <IconArrowLeft size="1.1rem" stroke={1.5} />
+            )}
+          </ActionIcon>
+        }
+        placeholder="Search Products"
+        rightSectionWidth={42}
+        {...props}
+      />
+    </form>
   );
 }
 
@@ -144,7 +149,7 @@ export default function HeaderTabs() {
     <div className={classes.header}>
       <Container className={classes.mainSection}>
         <Group position="apart" noWrap>
-          <Title size={'h6'}>
+          <Title size={"h6"}>
             <strong>BAMER</strong>
           </Title>
 
@@ -164,7 +169,6 @@ export default function HeaderTabs() {
                     radius="xl"
                     size={20}
                   />
-                  {/* <IconChevronDown size={rem(12)} stroke={1.5} /> */}
                 </Group>
               </UnstyledButton>
             </Menu.Target>

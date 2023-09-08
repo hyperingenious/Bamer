@@ -1,15 +1,25 @@
-import { useLoaderData, useNavigation } from "react-router-dom";
+import { useLoaderData, useNavigate, useNavigation } from "react-router-dom";
 import { getProductsData } from "../services/apiProducts";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { IconShoppingCartPlus } from "@tabler/icons-react";
+import Loader from "../ui/Loader";
 
 export default function Products() {
   const products = useLoaderData();
-  console.log(products);
-
   const navigation = useNavigation();
-  console.log(navigation);
+  const navigate = useNavigate();
+  const isLoading = navigation.state === "loading";
+  const authenticated = true;
+  
+
+  function handleClick(productId: string) {
+    if (!authenticated) navigate(`/register`);
+    if (authenticated) navigate(`/productCheckout/${productId}`);
+  }
+
   return (
     <>
+      {isLoading && <Loader />}
       <div
         className="container-fluid cont-box bg-trasparent my-4 p-3"
         style={{ position: "relative" }}
@@ -38,8 +48,8 @@ export default function Products() {
                         {product.price}$
                       </span>
                       {/* discount */}
-                      <span className="me-2 fw-bolder text-success">
-                        {product.discount}%
+                      <span className="me-2 ms-1 fw-bolder text-success">
+                        {product.discount}% off
                       </span>
                       {/* original price */}
                       <span
@@ -65,8 +75,18 @@ export default function Products() {
                   </h3>
 
                   <div className="d-grid gap-2 my-4">
-                    <a href="#" className="btn btn-warning bold-btn">
+                    <button
+                      onClick={() => handleClick(product.id)}
+                      className="btn btn-warning bold-btn"
+                    >
                       buy now
+                    </button>
+                    <a
+                      href="#"
+                      className="btn bg-transparent bold-btn border-2 border-warning"
+                    >
+                      <IconShoppingCartPlus className="me-2" />
+                      ADD TO CART
                     </a>
                   </div>
                 </div>
@@ -80,7 +100,9 @@ export default function Products() {
 }
 
 export async function loader({ params }) {
+
   const query: string = params.query;
   const response = await getProductsData(query);
+  console.log(response, query)
   return response;
 }
