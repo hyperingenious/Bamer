@@ -26,7 +26,7 @@ export default function Register() {
           name="registerMethod"
           value={registerMethod ? "login" : "signUp"}
         />
-        <button>{registerMethod? 'Login': 'Create Account'}</button>
+        <button>{registerMethod ? "Login" : "Create Account"}</button>
       </Form>
     </Container>
   );
@@ -80,11 +80,31 @@ export default function Register() {
 }
 
 export async function action({ request }) {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  if (data.registerMethod === "login")
-    userLogin({ email: data.email, password: data.password });
-  if (data.registerMethod === "signUp")
-    userSignUp({ email: data.email, password: data.password });
-  return null;
+  try {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+
+    if (data.registerMethod === "login") {
+      await userLogin({
+        email: data.email,
+        password: data.password,
+      });
+
+      window.history.length === 2
+        ? (window.location.href = "/")
+        : window.history.back();
+    }
+
+    if (data.registerMethod === "signUp") {
+      userSignUp({ email: data.email, password: data.password });
+      window.history.length === 2
+        ? (window.location.href = "/")
+        : window.history.back();
+    }
+
+    return null;
+  } catch (e) {
+    console.error(e, "heyError this side");
+    return null;
+  }
 }

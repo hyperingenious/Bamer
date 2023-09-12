@@ -11,6 +11,7 @@ import {
   ActionIcon,
   useMantineTheme,
   Title,
+  Text,
 } from "@mantine/core";
 import {
   IconLogout,
@@ -19,6 +20,10 @@ import {
   IconArrowLeft,
   IconShoppingCart,
   IconPackage,
+  IconUser,
+  IconLogin,
+  IconUserPlus,
+  IconUserCircle,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 
@@ -144,6 +149,7 @@ export function SearchBar(props: TextInputProps) {
 
 export default function HeaderTabs() {
   const { classes } = useStyles();
+  const authenticated = true;
 
   return (
     <div className={classes.header}>
@@ -163,28 +169,44 @@ export default function HeaderTabs() {
             <Menu.Target>
               <UnstyledButton>
                 <Group spacing={7}>
-                  <Avatar
-                    src={data.user.image}
-                    alt={data.user.name}
-                    radius="xl"
-                    size={20}
-                  />
+                  {!authenticated ? (
+                    <>
+                      <IconUser />
+                      <Text weight={"normal"}>Sign in</Text>
+                    </>
+                  ) : (
+                    <>
+                      <IconUserCircle />
+                      <Text weight={'li'}>skbmasale</Text>
+                    </>
+                  )}
                 </Group>
               </UnstyledButton>
             </Menu.Target>
             <Menu.Dropdown>
-              <Menu.Item icon={<IconShoppingCart size="0.9rem" stroke={1.5} />}>
-                Cart
-              </Menu.Item>
-              <Menu.Item icon={<IconPackage size="0.9rem" stroke={1.5} />}>
-                My Orders
-              </Menu.Item>
-              <Menu.Item
-                color="red"
-                icon={<IconLogout size="0.9rem" stroke={1.5} />}
-              >
-                Logout
-              </Menu.Item>
+              {!authenticated ? (
+                <Menu.Item icon={<IconUserPlus size="0.9rem" stroke={1.5} />}>
+                  Don't have Account? <strong>SignUp</strong>
+                </Menu.Item>
+              ) : (
+                <>
+                  {" "}
+                  <Menu.Item
+                    icon={<IconShoppingCart size="0.9rem" stroke={1.5} />}
+                  >
+                    Cart
+                  </Menu.Item>
+                  <Menu.Item icon={<IconPackage size="0.9rem" stroke={1.5} />}>
+                    My Orders
+                  </Menu.Item>
+                  <Menu.Item
+                    color="red"
+                    icon={<IconLogout size="0.9rem" stroke={1.5} />}
+                  >
+                    Logout
+                  </Menu.Item>
+                </>
+              )}
             </Menu.Dropdown>
           </Menu>
         </Group>
