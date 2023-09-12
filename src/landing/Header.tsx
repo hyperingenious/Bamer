@@ -1,7 +1,6 @@
 import {
   createStyles,
   Container,
-  Avatar,
   UnstyledButton,
   Group,
   Menu,
@@ -21,11 +20,12 @@ import {
   IconShoppingCart,
   IconPackage,
   IconUser,
-  IconLogin,
   IconUserPlus,
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
+import { getUser } from "../services/apiAuthentication";
+import { useEffect, useState } from "react";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -149,7 +149,17 @@ export function SearchBar(props: TextInputProps) {
 
 export default function HeaderTabs() {
   const { classes } = useStyles();
-  const authenticated = true;
+  const [authenticated, setAuthenticated] = useState<boolean>(true);
+  const [user, setUser] = useState<null | object | string>();
+
+  useEffect(function () {
+    async function isLoggedIn() {
+      const currentUser = await getUser();
+      if (!currentUser) setAuthenticated(false);
+      if (currentUser?.role === "authenticated") setUser(currentUser.role);
+    }
+    isLoggedIn();
+  }, []);
 
   return (
     <div className={classes.header}>
@@ -177,7 +187,7 @@ export default function HeaderTabs() {
                   ) : (
                     <>
                       <IconUserCircle />
-                      <Text weight={'li'}>skbmasale</Text>
+                      <Text weight={"li"}>skbmasale</Text>
                     </>
                   )}
                 </Group>
