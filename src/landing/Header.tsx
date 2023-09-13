@@ -26,6 +26,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../services/apiAuthentication";
 import { useEffect, useState } from "react";
+import { ReactReduxContext, useDispatch, useSelector } from "react-redux";
+import { fetchAuthentication } from "../redux/authenticationSlice";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -149,17 +151,17 @@ export function SearchBar(props: TextInputProps) {
 
 export default function HeaderTabs() {
   const { classes } = useStyles();
-  const [authenticated, setAuthenticated] = useState<boolean>(true);
-  const [user, setUser] = useState<null | object | string>();
+  const dispatch = useDispatch();
 
-  useEffect(function () {
-    async function isLoggedIn() {
-      const currentUser = await getUser();
-      if (!currentUser) setAuthenticated(false);
-      if (currentUser?.role === "authenticated") setUser(currentUser.role);
-    }
-    isLoggedIn();
-  }, []);
+  const { authenticated, user } = useSelector((store) => store.authentication);
+  const navigate = useNavigate();
+
+  useEffect(
+    function () {
+      dispatch(fetchAuthentication());
+    },
+    [dispatch]
+  );
 
   return (
     <div className={classes.header}>
@@ -187,7 +189,9 @@ export default function HeaderTabs() {
                   ) : (
                     <>
                       <IconUserCircle />
-                      <Text weight={"li"}>skbmasale</Text>
+                      <Text weight={"li"}>
+                        {user.email.slice(0, user.email.indexOf("@"))}
+                      </Text>
                     </>
                   )}
                 </Group>
@@ -195,7 +199,10 @@ export default function HeaderTabs() {
             </Menu.Target>
             <Menu.Dropdown>
               {!authenticated ? (
-                <Menu.Item icon={<IconUserPlus size="0.9rem" stroke={1.5} />}>
+                <Menu.Item
+                  onClick={() => navigate("/register")}
+                  icon={<IconUserPlus size="0.9rem" stroke={1.5} />}
+                >
                   Don't have Account? <strong>SignUp</strong>
                 </Menu.Item>
               ) : (

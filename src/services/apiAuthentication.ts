@@ -43,7 +43,9 @@ export async function userSignUp({ email, password }: registerCredentials) {
 
 // get user object
 export async function getUser() {
-  const { data:{ session} } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   console.log(session);
 
   if (!session) return null;
@@ -53,4 +55,12 @@ export async function getUser() {
   console.log(data.user);
 
   return data?.user;
+}
+
+//LOGOUT
+export async function logout() {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) throw error;
+  return null;
 }
