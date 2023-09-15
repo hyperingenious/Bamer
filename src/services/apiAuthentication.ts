@@ -26,19 +26,36 @@ export async function userLogin({ email, password }: registerCredentials) {
   return loginData;
 }
 
+// create userData row
+async function createUserDataRow(uuid) {
+  const { error } = await supabase
+    .from("Userdata")
+    .insert([{ id: uuid }])
+    .select();
+
+  if (error) throw error;
+  return null;
+}
+
 // signup function
 export async function userSignUp({ email, password }: registerCredentials) {
-  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_IN") {
+      createUserDataRow(session?.user.id);
+    }
+  });
+
+  const { error: signUpError } = await supabase.auth.signUp({
     email,
     password,
   });
+
   if (signUpError) {
     console.error(signUpError);
     throw signUpError;
   }
-  console.log(signUpData);
 
-  return signUpData;
+  return null;
 }
 
 // get user object
@@ -48,7 +65,7 @@ export async function getUser() {
   } = await supabase.auth.getSession();
   console.log(session);
 
-  if (!session) return null;
+  if (!session) throw new Error("Not logged in");
 
   const { data, error } = await supabase.auth.getUser();
   if (error) throw error;
@@ -60,7 +77,6 @@ export async function getUser() {
 //LOGOUT
 export async function logout() {
   const { error } = await supabase.auth.signOut();
-
   if (error) throw error;
   return null;
 }

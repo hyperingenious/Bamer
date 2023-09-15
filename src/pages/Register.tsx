@@ -96,10 +96,10 @@ export async function action({ request }) {
     }
 
     if (data.registerMethod === "signUp") {
-      userSignUp({ email: data.email, password: data.password });
-      window.history.length === 2
-        ? (window.location.href = "/")
-        : window.history.back();
+      await userSignUp({ email: data.email, password: data.password });
+      // window.history.length === 2
+      //   ? (window.location.href = "/")
+      //   : window.history.back();
     }
 
     return null;
