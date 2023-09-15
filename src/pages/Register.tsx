@@ -1,10 +1,15 @@
 import { Anchor, Container, Title } from "@mantine/core";
 import { Form } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { userLogin, userSignUp } from "../services/apiAuthentication";
+import toast from "react-hot-toast/headless";
 
 export default function Register() {
   const [registerMethod, setRegisterMethod] = useState(true); // true: login method | false: signup method
+
+  useEffect(() => {
+    toast.success("This is a test toast");
+  }, []);
 
   return (
     <Container size={"lg"}>
@@ -90,16 +95,15 @@ export async function action({ request }) {
         password: data.password,
       });
 
-      window.history.length === 2
-        ? (window.location.href = "/")
-        : window.history.back();
+      window.location.href= 'http://localhost:5173'
+      
+      // window.history.length === 2
+      //   ? (window.location.href = "/")
+      //   : window.history.back();
     }
 
     if (data.registerMethod === "signUp") {
       await userSignUp({ email: data.email, password: data.password });
-      // window.history.length === 2
-      //   ? (window.location.href = "/")
-      //   : window.history.back();
     }
 
     return null;

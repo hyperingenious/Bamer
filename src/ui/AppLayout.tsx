@@ -4,6 +4,7 @@ import HeaderTabs from "../landing/Header";
 export default function AppLayout() {
   return (
     <>
+
       <HeaderTabs />
       <Outlet />
     </>
