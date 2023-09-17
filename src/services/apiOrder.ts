@@ -16,5 +16,4 @@ export async function placeOrder() {
     .select();
 
   if (error) throw error;
-  console.log(submittedData);
 }

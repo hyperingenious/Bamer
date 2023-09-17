@@ -5,9 +5,6 @@ export const checkAuthentication = createAsyncThunk(
   "authentication/checkAuthentication",
   async function () {
     const authenticationResponse = await getUser();
-    console.log("Hey");
-    console.log(authenticationResponse);
-
     return authenticationResponse;
   }
 );
@@ -21,17 +18,17 @@ export const logoutUser = createAsyncThunk(
 );
 
 type authTypes = {
-  authenticated: boolean | string;
+  authenticated: boolean;
   user: null | object;
-  status: "idle" | "pending" | "error";
-  error: object;
+  status: "idle" | "pending";
+  error: object | boolean;
 };
 
 const initialState: authTypes = {
-  authenticated: "",
+  authenticated: false,
   user: null,
   status: "idle",
-  error: {},
+  error: false,
 };
 
 const authenticationSlice = createSlice({
@@ -44,13 +41,13 @@ const authenticationSlice = createSlice({
         state.status = "pending";
       })
       .addCase(checkAuthentication.fulfilled, (state, action) => {
+        state.authenticated = true;
         state.status = "idle";
         state.user = action.payload;
-        state.authenticated = true;
       })
       .addCase(checkAuthentication.rejected, (state, action) => {
         state.authenticated = false;
-        state.status = "error";
+        state.status = "idle";
         state.user = {};
         state.error = action.error;
         console.error(action.error.stack);
@@ -64,9 +61,8 @@ const authenticationSlice = createSlice({
         state.user = {};
       })
       .addCase(logoutUser.rejected, (state, action) => {
-        state.status = "error";
         state.error = action.error;
-        console.log(action.error.stack);
+        state.status = "idle";
       }),
 });
 

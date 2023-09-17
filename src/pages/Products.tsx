@@ -103,6 +103,5 @@ export async function loader({ params }) {
 
   const query: string = params.query;
   const response = await getProductsData(query);
-  console.log(response, query)
   return response;
 }

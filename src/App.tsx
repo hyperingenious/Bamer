@@ -7,6 +7,8 @@ import ProductCheckout, {
   loader as productCheckoutLoader,
 } from "./pages/ProductCheckout";
 import Register, { action as registerAction } from "./pages/Register";
+import Cart from "./pages/Cart";
+import ProtectedRoutes from "./redux/ProtectedRoutes";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
         path: "productCheckout/:productId",
         element: <ProductCheckout />,
         loader: productCheckoutLoader,
+      },
+      {
+        path: "/cart",
+        element: (
+          <ProtectedRoutes>
+            <Cart />
+          </ProtectedRoutes>
+        ),
       },
     ],
   },

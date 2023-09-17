@@ -148,7 +148,7 @@ export default function HeaderTabs() {
 
   useEffect(
     function () {
-      dispatch(checkAuthentication());
+      if (!authenticated) dispatch(checkAuthentication());
     },
     [dispatch]
   );
@@ -180,7 +180,7 @@ export default function HeaderTabs() {
                     <>
                       <IconUserCircle />
                       <Text weight={"li"}>
-                        {user.email.slice(0, user.email.indexOf("@"))}
+                        {user?.email.slice(0, user.email.indexOf("@"))}
                       </Text>
                     </>
                   )}
@@ -190,7 +190,7 @@ export default function HeaderTabs() {
             <Menu.Dropdown>
               {!authenticated ? (
                 <Menu.Item
-                  onClick={() => navigate("/register")}
+                  onClick={() => navigate("register")}
                   icon={<IconUserPlus size="0.9rem" stroke={1.5} />}
                 >
                   Don't have Account? <strong>SignUp</strong>
@@ -199,6 +199,7 @@ export default function HeaderTabs() {
                 <>
                   {" "}
                   <Menu.Item
+                  onClick={()=>navigate('/cart')}
                     icon={<IconShoppingCart size="0.9rem" stroke={1.5} />}
                   >
                     Cart

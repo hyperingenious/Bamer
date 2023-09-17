@@ -5,7 +5,6 @@ import { placeOrder } from "../services/apiOrder";
 
 export default function ProductCheckout() {
   const [product] = useLoaderData();
-  console.log(product);
 
   return (
     <Grid className="mx-5">

@@ -21,13 +21,12 @@ export async function userLogin({ email, password }: registerCredentials) {
     console.error(loginError);
     throw loginError;
   }
-  console.log(loginData);
 
   return loginData;
 }
 
 // create userData row
-async function createUserDataRow(uuid) {
+async function createUserDataRow(uuid: string) {
   const { error } = await supabase
     .from("Userdata")
     .insert([{ id: uuid }])
@@ -58,18 +57,26 @@ export async function userSignUp({ email, password }: registerCredentials) {
   return null;
 }
 
-// get user object
-export async function getUser() {
+// get session
+export async function getSession() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  console.log(session);
 
+  if (session) {
+    return session;
+  } else {
+    return null;
+  }
+}
+
+// get user object
+export async function getUser() {
+  const session = await getSession();
   if (!session) throw new Error("Not logged in");
 
   const { data, error } = await supabase.auth.getUser();
   if (error) throw error;
-  console.log(data.user);
 
   return data?.user;
 }
