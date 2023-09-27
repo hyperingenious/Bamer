@@ -24,7 +24,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuthentication, logoutUser } from "../redux/authenticationSlice";
 
@@ -107,17 +107,22 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export function SearchBar(props: TextInputProps) {
+  const [searchInput, setSearchInput] = useState("");
   const theme = useMantineTheme();
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (e.target[0].value !== "") navigate(`product/${e.target[0].value}`);
+    if (searchInput !== "") navigate(`product/${searchInput}`);
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <TextInput
+        value={searchInput}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setSearchInput(e.target.value)
+        }
         style={{ maxWidth: "32rem" }}
         icon={<IconSearch size="0.5rem" stroke={1.5} />}
         radius={"md"}
@@ -150,7 +155,7 @@ export default function HeaderTabs() {
     function () {
       if (!authenticated) dispatch(checkAuthentication());
     },
-    [dispatch]
+    [dispatch, authenticated]
   );
 
   return (
@@ -199,7 +204,7 @@ export default function HeaderTabs() {
                 <>
                   {" "}
                   <Menu.Item
-                  onClick={()=>navigate('/cart')}
+                    onClick={() => navigate("/cart")}
                     icon={<IconShoppingCart size="0.9rem" stroke={1.5} />}
                   >
                     Cart

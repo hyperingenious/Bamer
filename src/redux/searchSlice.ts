@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, SerializedError } from "@reduxjs/toolkit";
 import { getProductsData } from "../services/apiProducts";
 
 export const fetchQuery = createAsyncThunk(
@@ -9,12 +9,17 @@ export const fetchQuery = createAsyncThunk(
   }
 );
 
+type InitialState = {
+  data: [];
+  status: "idle" | "pending" | "error";
+  errorMessage: "noError" | string | undefined | SerializedError
+};
 
-const initialState = {
+const initialState: InitialState = {
   data: [],
   status: "idle",
-  errorMessage :'noError'
-} 
+  errorMessage: "noError",
+};
 
 const searchSlice = createSlice({
   name: "search",
@@ -25,15 +30,18 @@ const searchSlice = createSlice({
     },
   },
   extraReducers: (builder) =>
-    builder.addCase(fetchQuery.pending, (state)=> {
-      state.status = "pending";
-    }).addCase(fetchQuery.fulfilled, (state, action)=>{
-        state.status = 'idle'
-        state.data = [...state.data, ...action.payload]
-    }).addCase(fetchQuery.rejected, (state, action)=>{
-      state.status = 'error'
-      state.errorMessage = action.error.message
-    })
+    builder
+      .addCase(fetchQuery.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(fetchQuery.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.data = [...state.data, ...action.payload];
+      })
+      .addCase(fetchQuery.rejected, (state, action) => {
+        state.status = "error";
+        state.errorMessage = action.error.message;
+      }),
 });
 
-export default searchSlice.reducer
+export default searchSlice.reducer;
