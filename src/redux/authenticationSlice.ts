@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getUser, logout } from "../services/apiAuthentication";
 
+
 export const checkAuthentication = createAsyncThunk(
   "authentication/checkAuthentication",
   async function () {

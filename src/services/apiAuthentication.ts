@@ -40,7 +40,7 @@ async function createUserDataRow(uuid: string) {
 export async function userSignUp({ email, password }: registerCredentials) {
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN") {
-      createUserDataRow(session?.user.id);
+      if (session) createUserDataRow(session.user.id);
     }
   });
 

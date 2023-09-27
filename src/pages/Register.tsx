@@ -95,7 +95,7 @@ export default function Register() {
   // );
 }
 
-export async function action({ request }) {
+export async function action({ request }: { request: any }): Promise<null> {
   try {
     const formData = await request.formData();
     const data = Object.fromEntries(formData);

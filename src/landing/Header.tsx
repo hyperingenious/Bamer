@@ -25,8 +25,9 @@ import {
 } from "@tabler/icons-react";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { checkAuthentication, logoutUser } from "../redux/authenticationSlice";
+import { AppDispatch, RootState } from "../redux/store";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -146,9 +147,13 @@ export function SearchBar(props: TextInputProps) {
 
 export default function HeaderTabs() {
   const { classes } = useStyles();
-  const dispatch = useDispatch();
+  const useAppDispatch: () => AppDispatch = useDispatch;
+  const dispatch = useAppDispatch();
 
-  const { authenticated, user } = useSelector((store) => store.authentication);
+  const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+  const { authenticated, user } = useAppSelector(
+    (store) => store.authentication
+  );
   const navigate = useNavigate();
 
   useEffect(

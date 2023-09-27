@@ -9,7 +9,7 @@ export async function placeOrder() {
   if (userDataError) throw userDataError;
   const stored_data = data[0].user_orders;
 
-  const { data: submittedData, error } = await supabase
+  const { error } = await supabase
     .from("User-data")
     .update({ user_orders: [...stored_data, { name: "Keshav" }] })
     .eq("user_id", 1)
